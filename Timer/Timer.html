@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+<title>Timer</title>
+<link type="text/css" rel="stylesheet" href="Timer.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="time">
+
+</div>
+<div class="color">
+Color
+</div>
+<script>
+timer();
+var color
+function timer(){
+  time = new Date()
+  $('.time').text(time)
+  color =$('body').css('background-color')
+  var colored=rgbtohex(color)
+  $('body').css('background-color',colored)
+  $('.color').text(colored)
+  setTimeout(timer,1000)
+}
+function rgbtohex(rgb){
+rgb=rgb.match(/(\d+)/g).map(i=>Number(i))
+rgb=change(rgb)
+return '#'+hex(rgb[0])+hex(rgb[1])+hex(rgb[2])
+}
+function hex(n){
+  var ref =["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
+  if(n==0){return '00'}
+  else if (0<n && n<16) {;return '0'+ref[n].toString()}
+  else {return n.toString(16)}
+}
+function change(rgb){
+  rgb[0]=Math.floor((Math.random() * 256) );
+  rgb[1]=Math.floor((Math.random() * 256) );
+  rgb[2]=Math.floor((Math.random() * 256) );
+  return rgb
+}
+
+</script>
+
+
+
+</body>
