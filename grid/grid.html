@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="grid.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="colorset">
+  <h4>color select</h4>
+  <div class="color"></div>
+</div>
+<div id="main">
+  <div class="row"><div class="out"><div class="inn"></div></div><div class="out"><div class="inn"></div></div><div class="out"><div class="inn"></div></div></div>
+  <div class="row"><div class="out"><div class="inn"></div></div><div class="out"><div class="inn"></div></div><div class="out"><div class="inn"></div></div></div>
+ <div class="row"><div class="out"><div class="inn"></div></div><div class="out"><div class="inn"></div></div><div class="out"><div class="inn"></div></div></div>
+</div>
+
+<script>
+var out=$('.out')
+$('.inn').on('click',function(e){
+  e.stopPropagation();
+})
+$('.inn').on('mousedown',function(e){
+  e.stopPropagation();
+  e.preventDefault();
+})
+$('#main .row:last-child').children().css('border-bottom','none')
+$('.out:last-child').css('border-right','none')
+var ox,oy,h,w
+out.on('mousedown',start)
+function start(e){
+  var i =$(this)
+  var index = i.index()+1
+  ox=e.clientX
+  oy=e.clientY
+  w=parseInt(out.width())
+  h=parseInt(out.height())
+  $(window).on('mousemove',resize)
+  $(window).on('mouseup',off)
+  function off(){
+    $(window).off('mousemove',resize)
+  }
+  function resize(e){
+    var dx=e.clientX-ox
+    var dy=e.clientY-oy
+
+    console.log(w+dx)
+    $('.row .out:nth-child('+index+')').width(w+dx)
+    i.parent().height(h+dy)
+  }
+}
+var colorh =$('.color').height();
+var deltah=colorh/9/9/9
+var r=0
+var g=0
+var b=0
+var dc=[0,32,64,96,128,160,192,224,255]
+for(i=0;i<9;i++){
+  for(j=0;j<9;j++){
+    for(k=0;k<9;k++){
+$('.color').append(
+  $('<div/>')
+  .addClass('set')
+  .css('background-color','rgb('+dc[i]+','+dc[j]+','+dc[k]+')')
+  .height(deltah)
+);
+}}}
+var nowcolor
+$('.set').on('click',function(){
+  nowcolor=$(this).css('background-color')
+})
+$('.inn').on('click',function(){
+  if(nowcolor!==undefined){$(this).css('background-color',nowcolor)}
+  else{alert('choose a color')}
+})
+
+
+
+
+
+
+</script>
+</body>
+</html>
