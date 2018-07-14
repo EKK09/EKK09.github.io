@@ -1,0 +1,31 @@
+.head{
+width: 100%;
+height: auto;
+font-family: serif;
+text-align: center;
+border-bottom: 4px dotted #523abc;
+}
+h6{
+  margin: 0 auto;
+}
+h1{
+  margin: 5px auto;
+}
+h3{
+  display: inline-block;
+  margin: 0;
+  font-size: 40px;
+  font-weight: bolder;
+  color: #25b3ca;
+}
+a{
+  font-size: 40px;
+  font-weight: bolder;
+}
+.content{
+  width: 100%;
+  min-height:500px;
+  padding: 30px 10%;
+box-sizing: border-box;
+
+}
