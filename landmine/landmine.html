@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<title>Landmine</title>
+<link type="text/css" rel="stylesheet" href="landmine.css">
+</head>
+<body>
+  <header><div id="home"><a href="https://ekk09.github.io/home.html">Home</a></div></header>
+<div id="main">
+<h3 id="time">time</h3>
+<div id="grids">
+
+</div>
+
+
+</div>
+<script>
+for(i=0;i<500*500/20/20;i++){
+$('#grids').append(
+  $('<div/>')
+  .addClass('grid')
+);
+}
+var start =false
+var ogt
+$('.grid').on('click',function(){
+ if(!start){
+   ogt =new Date()
+   start=true
+   timer();
+   mine();
+   console.log(minelist)
+ }});
+$('.grid').on('click',function(){
+  var i =$(this).index()
+  if(tapped.indexOf(i)==-1){
+    tapped.push(i)
+  var round=0
+  console.log($(this).index())
+  if(minelist.indexOf(i)!==-1){
+    minelist.forEach((value)=>$('.grid').eq(value).css('background-color','red'))
+  }
+  else{
+    var s=check(i)
+    s.forEach(function (value){if(minelist.indexOf(value-1)!==-1){round+=1;}})
+    if(round!==0){$(this).text(round);$(this).css('background-color','#ffff1a')}
+    else{
+      $(this).css('background-color','#ffff1a')
+      s.forEach(function(value){
+      $('.grid').eq(value-1).click();
+    })}
+    if(tapped.length==625-100){alert('over')}
+  }
+}});
+//點過
+var tapped =[]
+//零的連鎖
+
+//檢查周遭
+function check(index){
+  var p =index+1
+  var sur=[]
+  if(p==1){sur.push(2,26,27)}
+  else if (p==25) {sur.push(24,49,50)}
+  else if (p==601) {sur.push(602,576,577)}
+  else if (p==625) {sur.push(624,600,599)}
+  else if(Math.floor(p/25)==0){sur.push(p+1,p-1,p+25,p+26,p+24)}
+  else if(Math.ceil(p/25)==25){sur.push(p+1,p-1,p-25,p-26,p-24)}
+  else if(p%25==1){sur.push(p+1,p+25,p-25,p+26,p-24)}
+  else if(p%25==0){sur.push(p-1,p+25,p-25,p-26,p+24)}
+  else{sur.push(p+1,p-1,p+25,p-25,p+26,p-26,p-24,p+24)}
+  return sur
+}
+// index 2 xy
+function index2xy(index){
+  var x=(index%25==0)?25:index%25
+  var y=Math.ceil(index/25)
+  return [x,y]
+}
+//xy 2 index
+function xy2index(list){
+
+}
+
+//地雷
+var minelist=[]
+function mine(){
+  while (minelist.length<100) {
+    var n=Math.floor(Math.random()*625)
+    if(minelist.indexOf(n)==-1){minelist.push(n);}
+  }
+}
+
+
+
+//計時
+function timer(){
+  setTimeout(function(){
+    var now =new Date()
+    $('#time').text(Math.round((now-ogt)/1000))
+    timer();
+  },1000)
+}
+</script>
+
+</body>
+</html>
