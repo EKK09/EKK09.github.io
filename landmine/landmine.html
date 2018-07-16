@@ -7,87 +7,106 @@
 </head>
 <body>
   <header><div id="home"><a href="https://ekk09.github.io/home.html">Home</a></div></header>
+<div class="title">
+<div class="level" id="easy">Easy</div>
+<div class="level" id="normal">Normal</div>
+<div class="level" id="hard">Expert</div>
+</div>
+<h3 id="time">Time</h3>
 <div id="main">
-<h3 id="time">time</h3>
 <div id="grids">
-
+<h1>choose level</h1>
 </div>
 
 
 </div>
 <script>
-for(i=0;i<500*500/20/20;i++){
-$('#grids').append(
-  $('<div/>')
-  .addClass('grid')
-);
-}
-var start =false
-var ogt
-$('.grid').on('click',function(){
- if(!start){
-   ogt =new Date()
-   start=true
-   timer();
-   mine();
-   console.log(minelist)
- }});
-$('.grid').on('click',function(){
+var side
+var minelist
+$('#easy').on('click',function(){
+  side=9
+  set(side)
+})
+$('#normal').on('click',function(){
+  side=16
+  set(side)
+})
+$('#hard').on('click',function(){
+  side=25
+  set(side)
+})
+function set(n){
+  $('#grids').width(n*20).height(n*20).empty()
+  for(i=0;i<n*n;i++){
+    $('#grids').append(
+      $('<div/>')
+      .addClass('grid'));}
+  minelist=[]
+  tapped=[]
+  mine();
+  console.log(minelist);
+  start=false
+  clearTimeout(freq);
+  $('#time').text('Time')
+  $('.grid').on('contextmenu',function(e){
+    e.preventDefault();
+    if(e.button==2){$(this).css('background-color','#ff2323').text('?')}})
+  $('.grid').on('click',function(){
+  if(!start){
+      ogt =new Date()
+      start=true
+      timer();}
+
+  //零的連鎖
+
   var i =$(this).index()
   if(tapped.indexOf(i)==-1){
+  if(minelist.indexOf(i)!==-1){minelist.forEach((value)=>$('.grid').eq(value).css('background-color','red'));clearTimeout(freq);}
+  else {
     tapped.push(i)
-  var round=0
-  console.log($(this).index())
-  if(minelist.indexOf(i)!==-1){
-    minelist.forEach((value)=>$('.grid').eq(value).css('background-color','red'))
-  }
-  else{
-    var s=check(i)
-    s.forEach(function (value){if(minelist.indexOf(value-1)!==-1){round+=1;}})
-    if(round!==0){$(this).text(round);$(this).css('background-color','#ffff1a')}
-    else{
-      $(this).css('background-color','#ffff1a')
+    if (tapped.length==side*side-Math.floor(side*side/4)) {
+      setTimeout(function(){alert('WIN')},0);
+      clearTimeout(freq);
+    }
+    var round=0
+    var s= check(i)
+    s.forEach(function(value){if(minelist.indexOf(value-1)!==-1){round+=1}})
+    if (round==0) {
+      $(this).css('background-color','#ffff00')
       s.forEach(function(value){
       $('.grid').eq(value-1).click();
-    })}
-    if(tapped.length==625-100){alert('over')}
-  }
-}});
+    })
+    }
+    else {
+      $(this).text(round).css('background-color','#ffff00')
+    }
+  }}
+});}
+var start =false
+var ogt
 //點過
 var tapped =[]
-//零的連鎖
-
 //檢查周遭
+var sur
 function check(index){
   var p =index+1
-  var sur=[]
-  if(p==1){sur.push(2,26,27)}
-  else if (p==25) {sur.push(24,49,50)}
-  else if (p==601) {sur.push(602,576,577)}
-  else if (p==625) {sur.push(624,600,599)}
-  else if(Math.floor(p/25)==0){sur.push(p+1,p-1,p+25,p+26,p+24)}
-  else if(Math.ceil(p/25)==25){sur.push(p+1,p-1,p-25,p-26,p-24)}
-  else if(p%25==1){sur.push(p+1,p+25,p-25,p+26,p-24)}
-  else if(p%25==0){sur.push(p-1,p+25,p-25,p-26,p+24)}
-  else{sur.push(p+1,p-1,p+25,p-25,p+26,p-26,p-24,p+24)}
+  sur=[]
+  if(p==1){sur.push(p+1,p+1+side,p+side)}
+  else if (p==side) {sur.push(p-1,p-1+side,p+side)}
+  else if (p==side*(side-1)+1) {sur.push(p+1,p-side,p+1-side)}
+  else if (p==side*side) {sur.push(p-1,p-1-side,p-side)}
+  else if(Math.floor(p/side)==0){sur.push(p+1,p-1,p+side,p-1+side,p+1+side)}
+  else if(Math.ceil(p/side)==side){sur.push(p+1,p-1,p-side,p+1-side,p-1-side)}
+  else if(p%side==1){sur.push(p+1,p+side,p-side,p+1+side,p+1-side)}
+  else if(p%side==0){sur.push(p-1,p+side,p-side,p-1-side,p-1+side)}
+  else{sur.push(p+1,p-1,p+side,p-side,p+1+side,p+1-side,p-1+side,p-1-side)}
   return sur
-}
-// index 2 xy
-function index2xy(index){
-  var x=(index%25==0)?25:index%25
-  var y=Math.ceil(index/25)
-  return [x,y]
-}
-//xy 2 index
-function xy2index(list){
-
 }
 
 //地雷
-var minelist=[]
 function mine(){
-  while (minelist.length<100) {
-    var n=Math.floor(Math.random()*625)
+  while (minelist.length<Math.floor(side*side/4)) {
+    var n=Math.floor(Math.random()*side*side)
     if(minelist.indexOf(n)==-1){minelist.push(n);}
   }
 }
@@ -95,10 +114,13 @@ function mine(){
 
 
 //計時
+var freq
 function timer(){
-  setTimeout(function(){
+  freq=setTimeout(function(){
     var now =new Date()
-    $('#time').text(Math.round((now-ogt)/1000))
+    var s =Math.round((now-ogt)/1000)%60<10?'0'+Math.round((now-ogt)/1000)%60:Math.round((now-ogt)/1000)%60
+    var m =Math.round(Math.round((now-ogt)/1000)/60)<10?'0'+Math.round(Math.round((now-ogt)/1000)/60):Math.round(Math.round((now-ogt)/1000)/60)
+    $('#time').text(m+':'+s)
     timer();
   },1000)
 }
