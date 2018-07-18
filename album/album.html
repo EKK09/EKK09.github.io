@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<title>Album</title>
+<link type="text/css" rel="stylesheet" href="album.css">
+</head>
+<body>
+  <header><div id="home"><a href="https://ekk09.github.io/home.html">Home</a></div></header>
+
+<div id="album">
+<div class="photo">
+  <div  class="page"id="f"></div>
+  <div class="page"id="b"></div>
+</div>
+<div class="photo2" id="s"></div>
+</div>
+<script>
+window.onload=function(){
+  var pics = 0;
+  var f=document.getElementById('f')
+  var b=document.getElementById('b')
+  var a=document.getElementById('album')
+  var s=document.getElementById('s')
+  a.style.backgroundImage="url('../images/"+pics+".JPG')"
+  f.style.backgroundImage="url('../images/"+pics%3+".JPG')"
+  b.style.backgroundImage="url('../images/"+(pics+1)%3+".JPG')"
+  s.style.backgroundImage="url('../images/"+(pics+1)%3+".JPG')"
+
+  $('.photo').on('click',function(){
+    pics++;
+    $(this).css('transform','rotateY(180deg)')
+    $(this).css('transition','1s ease')
+    $('.photo').on('transitionend',function(){
+      $(this).css('transition','none')
+      $(this).css('transform','rotateY(0deg) perspective(900px)')
+
+      f.style.backgroundImage="url('../images/"+pics%3+".JPG')"
+      b.style.backgroundImage="url('../images/"+(pics+1)%3+".JPG')"
+      a.style.backgroundImage="url('../images/"+pics%3+".JPG')"
+      s.style.backgroundImage="url('../images/"+(pics+1)%3+".JPG')"
+    })
+  })
+
+}
+
+
+
+</script>
+
+</body>
+</html>
