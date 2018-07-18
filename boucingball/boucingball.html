@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<title>Bouncing Ball</title>
+<link type="text/css" rel="stylesheet" href="ball.css">
+</head>
+<body>
+  <header><div id="home"><a href="https://ekk09.github.io/home.html">Home</a></div></header>
+  <img id="ball" src="../images/ball.png"/>
+
+<script>
+window.onload=play();
+function play(){
+  var ball =document.getElementById('ball')
+  var vy=0
+  var vx=0//初速
+  var a=1//重力加速度
+  var damp=0.1
+  var r=0.9//牆壁反彈係數
+  var h//球高
+  var l//球離左側邊水平距離
+  var freq,t1,t2,x1,x2,y1,y2,dt
+  var width=document.body.clientWidth
+  var height=document.body.clientHeight
+  ball.onmousedown=function(e){
+    e.preventDefault();
+    t1 = new Date()
+    x1 = e.clientX
+    y1 = e.clientY
+    var inx =e.clientX-ball.offsetLeft //滑鼠在球內部的位置
+    var iny =e.clientY-ball.offsetTop
+    clearTimeout(freq)
+    document.onmousemove=function(e){
+      e.preventDefault();
+      ball.style.left=e.clientX-inx+'px';
+      ball.style.top=e.clientY-iny+'px';
+    }
+    document.onmouseup=function(e){
+      t2 = new Date()
+      x2 = e.clientX
+      y2 = e.clientY
+      dt=Math.floor((t2-t1)/100)/10
+      if(dt<3){
+        vy=(y2-y1)/dt/100;
+        vx=(x2-x1)/dt/100;
+      }
+      document.onmousemove=null;
+      document.onmouseup=null;
+      fall();
+    }
+  }
+  function fall(){
+    h=height-ball.offsetTop-ball.clientHeight
+    l=ball.offsetLeft
+    freq = setTimeout(function(){
+      vy=vy+a
+      if(vy!==0){vy=vy>0?vy-damp:vy+damp;}
+      vx=vx>0?vx-damp:vx+damp
+      h=h-vy
+      l=l+vx
+      if(h<0){h=Math.abs(h);vy=vy*(-1)*r}
+      if (l<0) {
+        l=Math.abs(l);
+        vx=vx*(-1)*r;
+        ball.style.left=l+'px';
+      }
+      else if (l>(width-ball.clientWidth)) {
+        l=2*(width-ball.clientWidth)-l;
+        vx=vx*(-1)*r;
+        ball.style.left=l+'px';
+      }
+      else{ball.style.left=l+'px';}
+      ball.style.top=height-h-ball.clientHeight+'px';
+      if(h>1 || Math.abs(vy)>2 || Math.abs(vx)>1){fall();}
+    },16)
+  }
+}
+
+</script>
+</body>
+</html>
