@@ -1,7 +1,7 @@
 <html>
 <head>
   <title>Dogdown stairs</title>
-<link type="text/css" rel="stylesheet" href="go_down.css">
+<link type="text/css" rel="stylesheet" href="dogdown.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </head>
 <body>
@@ -140,7 +140,6 @@ function fall(){
     if(dogx<stairs[i].x+stairw && dogx>stairs[i].x-dogw && (dogy+dogh+a>stairs[i].y) && dogy+dogh<=stairs[i].y){
       dogy=stairs[i].y-dogh;
       falling=false;
-      cry=true;
       break;
     }
     else {
@@ -165,10 +164,6 @@ function draw(){
   fall();
   if(falling){
     dogy+=a;
-    if(cry){
-      document.getElementById('cry1').play();
-      cry=false;
-    }
   }
   downward();
   if(addgap>addspec){addstairs();addgap=0;}
@@ -178,7 +173,7 @@ function draw(){
   if(dogy-5>windowh){
     cancelAnimationFrame(repeat);
     clearTimeout(freq);
-    document.getElementById('cry2').play();
+    document.getElementById('cry1').play();
   }else if (dogy+dogh<0) {
     cancelAnimationFrame(repeat);
     clearTimeout(freq);
@@ -202,7 +197,7 @@ function timer(){
     var s=Math.floor(time%60)<10?'0'+Math.floor(time%60):Math.floor(time%60).toString();
     $('#time').text('Time:'+m+':'+s);
     timer();
-    if(time%60==0 && v<9){v+=1;a+=1.5;mo+=1}
+    if(time%60==0 && v<9){v+=0.8;a+=1.5;mo+=1}
   },1000)
 }
 function start(){
